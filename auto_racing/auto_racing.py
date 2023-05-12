@@ -1,6 +1,8 @@
 from pygame import *
 from time import sleep
 from random import *
+
+
 #создай игру "Лабиринт"!
 win_width = 700
 win_height = 500
@@ -10,21 +12,31 @@ background = transform.scale(
     image.load("road.png"),
     (win_width, win_height)
 )
+mixer.init()
+mixer.music.load("sfonk.ogg")
+mixer.music.play()
+kick = mixer.Sound("end.ogg")
+
 
 seconds_left = 100
-
-lost1 = 0
 score = 0
 game = True
 finish = False
 clock = time.Clock()
 FPS = 60
-
-score = 0
+score1 = 0
 goal = 10
 lost = 0
 max_lost = 3
 gray = (176, 176, 176)
+
+font.init()
+font = font.Font(None, 70)
+win = font.render('Победа', True, (220, 20, 60))
+lose = font.render("Проигрыш", True, (220, 20, 60))
+
+
+
 
 class GameSprite(sprite.Sprite):
     def __init__(self, player_image, player_x, player_y, size_x, size_y, player_speed):
@@ -88,10 +100,10 @@ class Wall(sprite.Sprite):
 
 
 rund = [50, 230, 410, 580]
-car = Player("car.png", 300, win_height - 150, 60, 120, 3)
+car = Player("car.png", 300, win_height - 150, 80, 140, 4)
 monsters = sprite.Group()
 for i in range(1, 4):
-    monster = Enemy("car1.png", choice(rund), -40, 80, 160, 2)
+    monster = Enemy("car1.png", choice(rund), -40, 80, 160, 3)
     monsters.add(monster)
 w1 = Wall(176, 176, 176, 172, 100, 7, 80)
 w2 = Wall(176, 176, 176, 172, 240, 7, 80)
@@ -136,8 +148,13 @@ while game:
         monsters.update()
         car.reset()
         monsters.draw(window)
+        score = font.render('Счёт:' + str(lost), True, (220, 20, 60))
+        window.blit(score, (10, 50))
         if sprite.spritecollide(car, monsters, False):
+            mixer.music.pause()
+            kick.play()
             finish = True 
+
 
 
         display.update()
