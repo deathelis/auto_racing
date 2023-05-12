@@ -1,6 +1,6 @@
 from pygame import *
 from time import sleep
-from random import randint
+from random import *
 #создай игру "Лабиринт"!
 win_width = 700
 win_height = 500
@@ -13,7 +13,7 @@ background = transform.scale(
 
 seconds_left = 100
 
-lost = 0
+lost1 = 0
 score = 0
 game = True
 finish = False
@@ -24,6 +24,7 @@ score = 0
 goal = 10
 lost = 0
 max_lost = 3
+gray = (176, 176, 176)
 
 class GameSprite(sprite.Sprite):
     def __init__(self, player_image, player_x, player_y, size_x, size_y, player_speed):
@@ -43,31 +44,66 @@ class Player(GameSprite):
             self.rect.x -= self.speed
         if keys[K_RIGHT] and self.rect.x < win_width - 80:
             self.rect.x += self.speed
-        if keys[K_UP] and self.rect.y < win_height:
-            self.rect.y -= self.speed
-        if keys[K_DOWN] and self.rect.y < win_height - 80:
-            self.rect.y += self.speed
-    def fire(self):
-        bullet = Bullet(img_bullet, self.rect.centerx, self.rect.top, 15, 20, -15)
-        bullets.add(bullet)
+        #if keys[K_UP] and self.rect.y < win_height:
+            #self.rect.y -= self.speed
+        #if keys[K_DOWN] and self.rect.y < win_height - 80:
+            #self.rect.y += self.speed
 
 class Enemy(GameSprite):
     def update(self):
         self.rect.y += self.speed
         global lost
         if self.rect.y > win_height:
-            self.rect.x = randint(80, win_width - 80)
+            self.rect.x = choice(rund)
             self.rect.y = 0
             lost = lost + 1
 
+class Wall(sprite.Sprite):
+    def __init__(self, color_1, color_2, color_3, wall_x, wall_y, wall_width, wall_height):
+        super().__init__()
+        self.color_1 = color_1
+        self.color_2 = color_2
+        self.color_3 = color_3
+        self.width = wall_width
+        self.height = wall_height
+        self.image = Surface((self.width, self.height))
+        self.image.fill((color_1, color_2, color_3))
+        self.rect = self.image.get_rect()
+        self.rect.x = wall_x
+        self.rect.y = wall_y
+    def draw_wall(self):
+        window.blit(self.image, (self.rect.x, self.rect.y))
+    def go(self):
+        self.rect.y += 1
+        if self.rect.y > win_height + 80:
+            self.rect.x = 172
+            self.rect.y = -140
+
+    def goo(self):
+        self.rect.y += 1
+        if self.rect.y > win_height + 80:
+            self.rect.x = 522
+            self.rect.y = -140
 
 
 
-car = Player("car.png", 5, win_height - 100, 80, 100, 5)
+rund = [50, 230, 410, 580]
+car = Player("car.png", 300, win_height - 150, 60, 120, 3)
 monsters = sprite.Group()
-for i in range(1, 6):
-    monster = Enemy("car1.png", randint(80, win_width - 80), -40, 80, 120, randint(1, 5))
+for i in range(1, 4):
+    monster = Enemy("car1.png", choice(rund), -40, 80, 160, 2)
     monsters.add(monster)
+w1 = Wall(176, 176, 176, 172, 100, 7, 80)
+w2 = Wall(176, 176, 176, 172, 240, 7, 80)
+w3 = Wall(176, 176, 176, 172, 380, 7, 80)
+w4 = Wall(176, 176, 176, 172, -40, 7, 80)
+w5 = Wall(176, 176, 176, 172, -180, 7, 80)
+
+w6 = Wall(176, 176, 176, 522, 100, 7, 80)
+w7 = Wall(176, 176, 176, 522, 240, 7, 80)
+w8 = Wall(176, 176, 176, 522, 380, 7, 80)
+w9 = Wall(176, 176, 176, 522, -40, 7, 80)
+w10 = Wall(176, 176, 176, 522, -180, 7, 80)
 
 while game:
     for e in event.get():
@@ -75,6 +111,27 @@ while game:
             game = False
     if not finish:
         window.blit(background,(0,0))
+        w1.draw_wall()
+        w2.draw_wall()
+        w3.draw_wall()
+        w4.draw_wall()
+        w5.draw_wall()
+        w6.draw_wall()
+        w7.draw_wall()
+        w8.draw_wall()
+        w9.draw_wall()
+        w10.draw_wall()
+        w1.go()
+        w2.go()
+        w3.go()
+        w4.go()
+        w5.go()
+        w6.goo()
+        w7.goo()
+        w8.goo()
+        w9.goo()
+        w10.goo()
+        sleep(0.01)
         car.update()
         monsters.update()
         car.reset()
