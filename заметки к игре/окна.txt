@@ -1,0 +1,84 @@
+from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QLabel, QVBoxLayout, QHBoxLayout, QMessageBox, QRadioButton
+from random import randint
+#создание приложения и главного окна
+app = QApplication([])
+main_win = QWidget()
+main_win.resize(400, 200)
+main_win.setWindowTitle('Конкурс от Crazy People')
+#создание виджетов главного окна
+text = QLabel('Как звали первого ютуб-блогера, набравшего 100000000 подписчиков?')
+button1 = QRadioButton('Рэт и Линк')
+button2 = QRadioButton('PewDiePie')
+button3 = QRadioButton('SlivkiShow')
+button4 = QRadioButton('TheBrianMaps')
+button5 = QRadioButton('Mister Max')
+button6 = QRadioButton('EeOneGuy')
+#расположение виджетов по лэйаутам
+layout_main = QVBoxLayout()
+layoutH1 = QHBoxLayout()
+layoutH2 = QHBoxLayout()
+layoutH3 = QHBoxLayout()
+layout_main.addLayout(layoutH1)
+layout_main.addLayout(layoutH2)
+layout_main.addLayout(layoutH3)
+layoutH1.addWidget(text, alignment = Qt.AlignCenter)
+layoutH2.addWidget(button1, alignment = Qt.AlignCenter)
+layoutH2.addWidget(button2, alignment = Qt.AlignCenter)
+layoutH2.addWidget(button3, alignment = Qt.AlignCenter)
+layoutH3.addWidget(button4, alignment = Qt.AlignCenter)
+layoutH3.addWidget(button5, alignment = Qt.AlignCenter)
+layoutH3.addWidget(button6, alignment = Qt.AlignCenter)
+main_win.setLayout(layout_main)
+
+#обработка нажатий на переключатели
+
+def show_win():
+    #победитель
+    victory_win = QMessageBox()
+    victory_win.setText('Вы выиграли встречу с создателями канала!')
+    victory_win.exec_()
+
+
+def show_lose():
+    victory_win = QMessageBox()
+    victory_win.setText('Повезёт в другой раз!')
+    victory_win.exec_()
+
+
+
+def show_winner():
+    show_lose()
+
+button1.clicked.connect(show_winner)
+
+def show_winner():
+    show_lose()
+
+button3.clicked.connect(show_winner)
+
+def show_winner():
+    #победитель
+    show_win()
+
+button2.clicked.connect(show_winner)
+
+def show_winner():
+    show_lose()
+
+button4.clicked.connect(show_winner)
+
+def show_winner():
+    show_lose()
+
+button5.clicked.connect(show_winner)
+
+def show_winner():
+    show_lose()
+
+button6.clicked.connect(show_winner)
+
+
+#отображение окна приложения 
+main_win.show()
+app.exec_()

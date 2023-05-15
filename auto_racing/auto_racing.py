@@ -1,9 +1,8 @@
 from pygame import *
 from time import sleep
 from random import *
-
-
-#создай игру "Лабиринт"!
+from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QLabel, QVBoxLayout, QHBoxLayout, QMessageBox, QRadioButton
 win_width = 700
 win_height = 500
 window = display.set_mode((win_width, win_height))
@@ -153,6 +152,10 @@ while game:
         if sprite.spritecollide(car, monsters, False):
             mixer.music.pause()
             kick.play()
+            app = QApplication([])
+            victory_win = QMessageBox()
+            victory_win.setText('Игра окончена, ваш счёт: ' + str(lost))
+            victory_win.exec_()
             finish = True 
 
 
